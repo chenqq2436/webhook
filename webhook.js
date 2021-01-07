@@ -4,12 +4,6 @@ const bodyParser = require("body-parser");
 const crypto = require("crypto");
 const { spawn } = require("child_process");
 
-// parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: false }));
-
-// parse application/json
-app.use(bodyParser.json());
-
 // 签名
 const SECRET = "123456";
 
@@ -19,6 +13,12 @@ function sign(body) {
 }
 
 const app = express();
+
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }));
+
+// parse application/json
+app.use(bodyParser.json());
 
 // 接受githubpush的hook
 app.post("/webhook", function (req, res) {
