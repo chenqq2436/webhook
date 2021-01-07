@@ -1,6 +1,6 @@
 const express = require("express");
 const crypto = require("crypto");
-const spawn = require("child_process");
+const { spawn } = require("child_process");
 
 // 签名
 const SECRET = "123456";
