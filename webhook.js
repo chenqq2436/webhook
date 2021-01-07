@@ -1,8 +1,10 @@
 const express = require("express");
 const crypto = require("crypto");
+const spawn = require("child_process");
 
 // 签名
 const SECRET = "123456";
+
 // 验证签名
 function sign(body) {
   return `sha1=${crypto.createHmac("sha1", SECRET).update(body).digest("hex")}`;
@@ -24,6 +26,23 @@ app.post("/webhook", function (req, res) {
     // 判断签名是否合法
     if (signature !== sign(body)) {
       return res.end("Not Allowed");
+    }
+    // 是push时间
+    if (event == "push") {
+      // 拿到推送信息
+      let payload = JSON.parse(body);
+      console.log("------参数信息-----");
+      console.log(payload);
+      // 开启子进程去执行对应的脚本 目前通过仓库名称匹配
+      const child = spawn("sh", [`./${payload.repository.name}`]);
+      const logBuffers = [];
+      child.stdout.on("data", function (buffer) {
+        logBuffers.push(buffer);
+      });
+      child.stdout.on("end", function () {
+        const log = Buffer.concat(logBuffers);
+        console.log("--------日志信息-------", log.toString());
+      });
     }
   });
   res.setHeader("Content-Type", "application/json");
