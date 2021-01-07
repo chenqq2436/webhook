@@ -20,7 +20,7 @@ app.post("/webhook", function (req, res) {
     console.log("开始接收流");
     buffers.push(buffer);
   });
-  res.on("end", () => {
+  req.on("end", () => {
     console.log("流接收结束");
     let body = Buffer.concat(buffers);
     let event = req.headers["x-github-event"]; // 类型 push
