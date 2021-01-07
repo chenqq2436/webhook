@@ -36,7 +36,7 @@ app.post("/webhook", function (req, res) {
       console.log("------参数信息-----");
       console.log(payload);
       // 开启子进程去执行对应的脚本 目前通过仓库名称匹配
-      const child = spawn("sh", [`./${payload.repository.name}`]);
+      const child = spawn("sh", [`./${payload.repository.name}.sh`]);
       const logBuffers = [];
       child.stdout.on("data", function (buffer) {
         logBuffers.push(buffer);
