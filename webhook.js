@@ -15,10 +15,14 @@ const app = express();
 // 接受githubpush的hook
 app.post("/webhook", function (req, res) {
   console.log("方法和地址", req.method, req.url);
+  console.log(req.params, req.body);
   let buffers = [];
   req.on("data", (buffer) => {
     console.log("开始接收流");
     buffers.push(buffer);
+  });
+  req.on("error", (err) => {
+    console.log("接收流错误了", err);
   });
   req.on("end", () => {
     console.log("流接收结束");
