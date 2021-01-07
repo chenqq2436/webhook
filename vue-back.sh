@@ -8,10 +8,10 @@ git clean -f
 echo '拉取最新代码'
 git pull origin master
 echo '开始执行构建'
-# .代表去当前目录下找Dockerfile文件去执行构建 -t指定一个任务名称
-docker build -t vue-back .
+# .代表去当前目录下找Dockerfile文件去执行构建 -t指定一个任务名称 需要指定版本号不然会报错 默认latest
+docker build -t vue-back:1.0 .
 echo '先停止并删除旧容器'
 docker stop vue-back-container
 docker rm vue-back-container
 echo 'docker container run 启动新容器 -p 映射到3000端口 -d 在后台运行 基于vue-back'
-docker container run -p 3000:3000 --name vue-back-container -d vue-back
+docker container run -p 3000:3000 --name vue-back-container -d vue-back:1.0
