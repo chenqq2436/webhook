@@ -10,6 +10,7 @@ function sign(body) {
 
 const app = express();
 
+// 接受githubpush的hook
 app.post("/webhook", function (req, res) {
   console.log("方法和地址", req.method, req.url);
   let buffers = [];
@@ -18,8 +19,8 @@ app.post("/webhook", function (req, res) {
   });
   res.on("end", () => {
     let body = Buffer.concat(buffers);
-    let event = req.header["x-gitHub-event"]; // 类型 push
-    let signature = req.header["x-hub-signature"]; // 签名采用hash算法 github请求来的时候，要传递请求体body，还会传来一个signature过来，你需要验证签名是否有效
+    let event = req.headers["x-gitHub-event"]; // 类型 push
+    let signature = req.headers["x-hub-signature"]; // 签名采用hash算法 github请求来的时候，要传递请求体body，还会传来一个signature过来，你需要验证签名是否有效
     // 判断签名是否合法
     if (signature !== sign(body)) {
       return res.end("Not Allowed");
