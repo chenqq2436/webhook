@@ -9,7 +9,12 @@ const SECRET = "123456";
 
 // 验证签名
 function sign(body) {
-  return `sha1=${crypto.createHmac("sha1", SECRET).update(body).digest("hex")}`;
+  const secret = `sha1=${crypto
+    .createHmac("sha1", SECRET)
+    .update(body)
+    .digest("hex")}`;
+  console.log("签名信息是---", secret);
+  return secret;
 }
 
 const app = express();
