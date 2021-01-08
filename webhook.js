@@ -64,12 +64,14 @@ app.post("/webhook", function (req, res) {
   let signature = req.headers["x-hub-signature"]; // 签名采用hash算法 github请求来的时候，要传递请求体body，还会传来一个signature过来，你需要验证签名是否有效
   // 判断签名是否合法
   if (signature !== sign(body.toString(), "utf8")) {
+    console.log("签名不合法啊----", event, signature);
     return res.end("Not Allowed");
   }
   // 是push时间
   if (event == "push") {
     // 拿到推送信息
-    let payload = JSON.parse(body);
+    // let payload = JSON.parse(body);
+    let payload = body;
     console.log("------参数信息-----");
     console.log(payload);
     // 开启子进程去执行对应的脚本 目前通过仓库名称匹配
