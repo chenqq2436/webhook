@@ -68,7 +68,7 @@ app.post("/webhook", function (req, res) {
   let event = req.headers["x-github-event"]; // 类型 push
   let signature = req.headers["x-hub-signature"]; // 签名采用hash算法 github请求来的时候，要传递请求体body，还会传来一个signature过来，你需要验证签名是否有效
   // 判断签名是否合法
-  if (signature !== sign(body.toString(), "utf8")) {
+  if (signature !== sign(Buffer(body.toString(), "utf8"))) {
     console.log("签名不合法啊----", event, signature);
     return res.end("Not Allowed");
   }
