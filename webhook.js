@@ -5,6 +5,8 @@ const { spawn } = require("child_process");
 
 // 签名
 const SECRET = "123456";
+// 发送邮件模块
+const sendMail = require("./sendMail");
 
 // 验证签名
 function sign(body) {
@@ -49,11 +51,21 @@ app.post("/webhook", function (req, res) {
       const child = spawn("sh", [`./${payload.repository.name}.sh`]);
       const logBuffers = [];
       child.stdout.on("data", function (buffer) {
+        console.log("------构建中-----");
         logBuffers.push(buffer);
       });
       child.stdout.on("end", function () {
-        const log = Buffer.concat(logBuffers);
-        console.log("--------日志信息-------", log.toString());
+        const logs = Buffer.concat(logBuffers).toString();
+        console.log("--------构建完成-------", logs);
+        sendMail(`
+            <h1>部署日期: ${new Date()}</h1>
+            <h2>部署人: ${payload.pusher.name}</h2>
+            <h2>部署邮箱: ${payload.pusher.email}</h2>
+            <h2>提交信息: ${
+              payload.head_commit && payload.head_commit["message"]
+            }</h2>
+            <h2>布署日志: ${logs.replace("\r\n", "<br/>")}</h2>
+        `);
       });
     }
   });
