@@ -22,9 +22,10 @@ function sendMail(message) {
   // send mail with defined transport object
   transporter.sendMail(mailOptions, (error, info) => {
     if (error) {
+      console.log("邮件发送失败", error);
       return console.log(error);
     }
-    console.log("Message sent: %s", info.messageId);
+    console.log("邮件发送成功", info);
   });
 }
 module.exports = sendMail;
