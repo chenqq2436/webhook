@@ -18,7 +18,7 @@ function sendMail(message) {
     subject: "部署通知", // 主题
     html: message, // 内容主体
   };
-  console.log("--------发送邮件------", info.messageId);
+  console.log("--------开始发送邮件------");
   // send mail with defined transport object
   transporter.sendMail(mailOptions, (error, info) => {
     if (error) {
